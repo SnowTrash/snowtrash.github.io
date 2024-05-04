@@ -10,6 +10,7 @@ onLoop(({ elapsed }) => {
   }
 })
 
+// Parametros de luz de postprocessing
 const bloomParams = reactive({
   luminanceThreshold: 0.2,
   luminanceSmoothing: 0.3,
@@ -23,16 +24,16 @@ const bloomParams = reactive({
   <TresCanvas window-size clear-color="#4f4f4f">
     <TresPerspectiveCamera :position="[-5.3, 8.3, 10.6]" :look-at="[0, 0, 0]" />
     <OrbitControls />
-    <TresMesh>
-      <TresSphereGeometry />
-      <TresMeshNormalMaterial />
-    </TresMesh>
-    <TresGridHelper />
-    <!-- <Suspense>
+    <Suspense>
       <Stones />
     </Suspense>
-    <EffectComposer>
+    <!--<TresMesh ref="sphereRef">
+       <TresSphereGeometry />
+      <TresMeshNormalMaterial />
+    </TresMesh> -->
+    <TresGridHelper /> 
+   <EffectComposer>
       <Bloom v-bind="bloomParams" />
-    </EffectComposer> -->
+    </EffectComposer>
   </TresCanvas>
 </template>
