@@ -34,7 +34,7 @@ littleStones.forEach((stone) => {
 materials.RockLight.emissive = new Color(204,0,204)
 materials.RockLight.emissiveIntensity = 4
 
-// console.log(littleStones)
+console.log(littleStones)
 // inspeccionamos la escena .glb o los objetos(grupo) importados
 console.log({nodes, materials,})
 
