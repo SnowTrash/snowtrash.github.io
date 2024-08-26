@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 // import { objectScale } from '@tresjs/cientos/dist/core/misc/html/utils.js';
 import { BlendFunction } from 'postprocessing';
+import { PointerLockControls , KeyboardControls  } from '@tresjs/cientos';
 const sphereRef = ref()
+const catRef = ref()
 
 const { onLoop } = useRenderLoop()
 
@@ -22,9 +24,10 @@ const bloomParams = reactive({
 </script>
 
 <template>
-  <TresCanvas window-size clear-color="#4f4f4f">
-    <TresPerspectiveCamera :position="[-5.3, 8.3, 10.6]" :look-at="[0, 0, 0]" />
-    <OrbitControls />
+  <TresCanvas window-size clear-color="#4f4f4f" shadows alpha >
+    <TresPerspectiveCamera :position="[-2, 1.4, 0]" :look-at="[0, 0, 0]" />
+    <!-- <PointerLockControls /> -->
+    <!-- <OrbitControls  /> -->
     <!-- <Suspense>
       <Stones />
     </Suspense> -->
@@ -40,16 +43,17 @@ const bloomParams = reactive({
     />
     
     <Suspense >
-      <Cat :position="[10, 0, 3]"/>
-    </Suspense>
-
-    <Suspense>
-      <User />
+      <Cat :position="[25, 1.6, 0]" :scale="[0.3,0.3,0.3]" :rotation="[1,-1,-5]" />
     </Suspense>
     
+    <KeyboardControls >
+    <Suspense>
+      <User ref="catRef"/>
+    </Suspense>
+    </KeyboardControls>
 
     <TresGridHelper /> 
-   <EffectComposer>
+    <EffectComposer>
       <Bloom v-bind="bloomParams" />
     </EffectComposer>
   </TresCanvas>
