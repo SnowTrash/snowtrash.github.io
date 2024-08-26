@@ -36,5 +36,5 @@ currentAction.value.play()
 <template>
   <!-- <primitive :object="nodes" /> -->
   <primitive :object="nodes.Armature" />
-  <primitive :object="nodes.reference" />
+  <!-- <primitive :object="nodes.reference" :rotation="[1,-5,1]" /> -->
 </template>

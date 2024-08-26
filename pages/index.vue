@@ -1,9 +1,19 @@
 <script lang="ts" setup>
 // import { objectScale } from '@tresjs/cientos/dist/core/misc/html/utils.js';
+import { reactive, ref, watchEffect } from 'vue'
 import { BlendFunction } from 'postprocessing';
 import { PointerLockControls , KeyboardControls  } from '@tresjs/cientos';
+
+import { useControls, TresLeches } from '@tresjs/leches'
+import '@tresjs/leches/styles'
+
+import { Vector3 } from 'three'
+
 const sphereRef = ref()
 const catRef = ref()
+const skullRef = ref()
+
+const cameraRef = ref()
 
 const { onLoop } = useRenderLoop()
 
@@ -11,23 +21,40 @@ onLoop(({ elapsed }) => {
   if (sphereRef.value) {
     sphereRef.value.position.y = Math.sin(elapsed)
   }
+
 })
 
-// Parametros de luz de postprocessing
-const bloomParams = reactive({
-  luminanceThreshold: 0.2,
-  luminanceSmoothing: 0.3,
-  mipmapBlur: true,
-  intensity: 0.8,
-  blendFunction: BlendFunction.ADD,
+
+const { awiwi, slider, rotation , gatito} = useControls({
+  awiwi: true,
+  slider: {
+    value: 0.5,
+    min: 0,
+    max: 1,
+    step: 0.01,
+  },
+  rotation: {
+    value: new Vector3(5, 5, 5),
+  },
+  gatito: {
+    value: new Vector3(1, 2, 3),
+  },
 })
+
+watchEffect(() => {
+  console.log(rotation.value.value)
+  console.log(skullRef.value)
+  // console.log(rotation.value.value.x)
+})
+
 </script>
 
 <template>
+  <TresLeches />
   <TresCanvas window-size clear-color="#4f4f4f" shadows alpha >
-    <TresPerspectiveCamera :position="[-2, 1.4, 0]" :look-at="[0, 0, 0]" />
+    <TresPerspectiveCamera :position="[0, 2, 4]" :look-at="[0, 0, 0]" :rotation="[0,0,0]" ref="cameraRef" />
     <!-- <PointerLockControls /> -->
-    <!-- <OrbitControls  /> -->
+    <OrbitControls  />
     <!-- <Suspense>
       <Stones />
     </Suspense> -->
@@ -43,18 +70,15 @@ const bloomParams = reactive({
     />
     
     <Suspense >
-      <Cat :position="[25, 1.6, 0]" :scale="[0.3,0.3,0.3]" :rotation="[1,-1,-5]" />
+      <Cat :position="[0, -4, -30]" :scale="[0.3,0.3,0.3]" :rotation="[rotation.value.x, rotation.value.y, rotation.value.z]" ref="skullRef" />
     </Suspense>
     
     <KeyboardControls >
     <Suspense>
-      <User ref="catRef"/>
+      <User ref="catRef" :rotation="[gatito.value.x,gatito.value.y,gatito.value.z]"/>
     </Suspense>
     </KeyboardControls>
 
     <TresGridHelper /> 
-    <EffectComposer>
-      <Bloom v-bind="bloomParams" />
-    </EffectComposer>
   </TresCanvas>
 </template>
