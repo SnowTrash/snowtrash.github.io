@@ -3,7 +3,7 @@ import { Color, MeshBasicMaterial } from 'three';
 
 const { scene: model , nodes , materials } = await useGLTF('skull-cat.glb')
 
-
+import { Sampler  } from '@tresjs/cientos';
 // Accedemos a las piedras pequeñas y las mostramos en la escena
 const littleStones = Object.values(nodes).filter(node => node.name.includes('Object_'))
 
@@ -26,5 +26,12 @@ console.log({nodes, materials,})
 
 </script>
 <template>
-  <primitive :object="nodes.Sketchfab_model" />
+<!-- <Sampler :count="50" > -->
+<primitive :object="nodes.Sketchfab_model" />
+
+<!-- <TresInstancedMesh :args="[null!, null!, 1000]">
+  <TresBoxGeometry :args="[0.1, 0.1, 0.1]" />
+  <TresMeshNormalMaterial />
+</TresInstancedMesh>
+</Sampler> -->
 </template>
