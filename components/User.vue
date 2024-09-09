@@ -6,9 +6,9 @@ import { useAnimations, useGLTF } from '@tresjs/cientos'
 const { scene: model , nodes , materials , animations } = await useGLTF('cat_run.glb')
 
 
-// Accedemos a las piedras pequeñas y las mostramos en la escena
-// const littleStones = Object.values(nodes).filter(node => node.name.includes('Object_'))
+// Este es el modelo del gato que corre
 
+// const littleStones = Object.values(nodes).filter(node => node.name.includes('Object_'))
 // const gato2 = Object.values(nodes).filter(node => node.name.includes('domestic_cat_(Felis_catus)_43703objcleanermaterialmergergl'))
 
 // console.log({"Nodos del Craneo del gato":littleStones})

@@ -3,8 +3,10 @@ import { Color, MeshBasicMaterial } from 'three';
 
 const { scene: model , nodes , materials } = await useGLTF('skull-cat.glb')
 
-import { Sampler  } from '@tresjs/cientos';
-// Accedemos a las piedras pequeñas y las mostramos en la escena
+// import { Sampler  } from '@tresjs/cientos';
+
+import { modelPosition } from 'three/examples/jsm/nodes/Nodes.js';
+// Este es el modelo del Craneo del gato
 const littleStones = Object.values(nodes).filter(node => node.name.includes('Object_'))
 
 const gato2 = Object.values(nodes).filter(node => node.name.includes('domestic_cat_(Felis_catus)_43703objcleanermaterialmergergl'))
@@ -27,7 +29,7 @@ console.log({nodes, materials,})
 </script>
 <template>
 <!-- <Sampler :count="50" > -->
-<primitive :object="nodes.Sketchfab_model" />
+<primitive :object="nodes.Sketchfab_model" v-bind="modelPosition"/>
 
 <!-- <TresInstancedMesh :args="[null!, null!, 1000]">
   <TresBoxGeometry :args="[0.1, 0.1, 0.1]" />
