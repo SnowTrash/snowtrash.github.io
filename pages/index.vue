@@ -30,19 +30,29 @@ const cubePositions = [
 // Mostrar luces cuando el gato esté cerca
 // Función para manejar el clic en los cubos
 const handleCubeClick = (cubeIndex: number) => {
-  if(isNearObject(cubePositions[cubeIndex], 1.5)){
+  if(isNearObject(cubePositions[cubeIndex], 2)){
     alert(`Cubo ${cubeIndex + 1} clickeado`)
   }
   // triggerCinematicCamera(cubeIndex) // Acción al clic
+}
+
+const smoothLookAt = (camera, target, factor = 0.1) => {
+  const direction = new Vector3().subVectors(target, camera.position).normalize()
+  camera.position.lerp(target, factor)
+  camera.lookAt(target)
 }
 
 // Handle keyboard controls in client-side lifecycle
 const moveCat = (direction: Vector3) => {
   if (canInteract.value) {
     catPos.value.add(direction)
-    camRef.value.lookAt(catPos.value)
+    
+    // Mueve la cámara suavemente hacia la nueva posición
+    const cameraOffset = new Vector3(0, 5, 10)
+    smoothLookAt(camRef.value, catPos.value.clone().add(cameraOffset))
   }
 }
+
 // const gatoRef = shallowRef(null)
 const handleKeyDown = (event: KeyboardEvent) => {
   if (canInteract.value) {
@@ -82,6 +92,12 @@ const SpheretriggerCinematicCamera = () => {
 const { onLoop } = useRenderLoop()
 onLoop(({ elapsed }) => {
 
+  // Actualizar posición de la cámara en cada loop
+  if (camRef.value && catPos.value) {
+    const cameraOffset = new Vector3(0, 5, 10) // Ajusta la distancia de la cámara aquí
+    camRef.value.position.lerp(catPos.value.clone().add(cameraOffset), 0.1) // Usa lerp para movimiento suave
+    camRef.value.lookAt(catPos.value) // Siempre mira hacia el gato
+  }
   // triggerLightNearCube() // Verificar si el gato está cerca de algún cubo
 
   const ghost1Angle = elapsed * 0.5
@@ -104,12 +120,7 @@ onLoop(({ elapsed }) => {
     // console.log("Valor camera: " + camRef.value.position.x)
     // console.log("Valor gatomodel: " + catPos.value.position)
     // camRef.value.lookAt(catPos.value.position);
-
-    if (camRef.value && catPos.value) {
-    const cameraOffset = new Vector3(0, 5, 10)
-    camRef.value.position.copy(catPos.value.clone().add(cameraOffset))
-    camRef.value.lookAt(catPos.value)
-  }  }
+ }
   
 })
 
@@ -138,7 +149,6 @@ const { awiwi, slider, rotation , gatito} = useControls({
   },
 })
 
-
 // watchEffect(() => {
 //   // console.log("Vector de rotacion: " + rotation.value.value)
 //   // console.log("Skullref valor: " + skullRef.value)
@@ -148,8 +158,6 @@ const { awiwi, slider, rotation , gatito} = useControls({
 
 import { signInWithPopup , GoogleAuthProvider  } from 'firebase/auth'
 // import { } from 'firebase/auth/web-extension';
-
-
 // Estados de autenticación
 const isAuthenticated = ref(false)
 const isGuest = ref(false)
@@ -214,15 +222,12 @@ const enterAsGuest = () => {
     </Suspense>
 
     <!-- Cubos alrededor del cráneo -->
-    <TresMesh v-for="(pos, index) in cubePositions" :key="index" :position="pos" @click="() => {handleCubeClick(index)}">
+    <TresMesh v-for="(pos, index) in cubePositions" :key="index" :position="pos" @click="handleCubeClick(index)">
       <TresBoxGeometry :args="[2, 2, 2]" /> <!-- Hacer los cubos más grandes -->
      <TresMeshStandardMaterial color="blue" transparent :opacity="0.5" /> <!-- Aplicar transparencia -->
-       <!-- Añadir un helper para visualizar la hitbox del cubo -->
-      
+       <!-- Añadir un helper para visualizar la hitbox del cubo -->    
     </TresMesh>
-    <BoxHelper />
-    
- 
+  
     <KeyboardControls v-if="canInteract">
     <Suspense >
       <User :rotation="[2,1.3,4]" :position="catPos" />
