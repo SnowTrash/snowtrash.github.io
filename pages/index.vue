@@ -69,28 +69,7 @@ const smoothLookAt = (camera, target, factor = 0.1) => {
   camera.lookAt(target)
 }
 
-// Handle keyboard controls in client-side lifecycle
-const moveCat = (direction: Vector3) => {
-  if (canInteract.value) {
-    catPos.value.add(direction)
-    
-    // Mueve la cámara suavemente hacia la nueva posición
-    // const cameraOffset = new Vector3(0, 5, 10)
-    // smoothLookAt(camRef.value, catPos.value.clone().add(cameraOffset))
-  }
-}
-
 // const gatoRef = shallowRef(null)
-const handleKeyDown = (event: KeyboardEvent) => {
-  if (canInteract.value) {
-    switch (event.key) {
-      case 'w': moveCat(new Vector3(0, 0, -0.1)); break
-      case 's': moveCat(new Vector3(0, 0, 0.13)); break
-      case 'a': moveCat(new Vector3(-0.13, 0, 0)); break
-      case 'd': moveCat(new Vector3(0.1, 0, 0)); break
-    }
-  }
-}
 
 const spherePos = new Vector3(5, 0.9, -15) // posición de la esfera
 const isNearObject = (objectPos: Vector3, threshold: number) => {
@@ -148,8 +127,6 @@ onLoop(({ elapsed }) => {
     camRef.value.position.lerp(catPos.value.clone().add(cameraOffset), 0.1) // Usa lerp para movimiento suave
     camRef.value.lookAt(catPos.value) // Siempre mira hacia el gato
   }
-
-  
   // triggerLightNearCube() // Verificar si el gato está cerca de algún cubo
   const ghost1Angle = elapsed * 0.5
   const ghost2Angle = -elapsed * 0.32
@@ -172,19 +149,6 @@ onLoop(({ elapsed }) => {
     // camRef.value.lookAt(catPos.value.position);
  }
 })
-
-
-
-// On mounted y BeforeMounted , mandar llamar fisicas?
-// Ensure keyboard events are registered on the client side
-onMounted(() => {
-  window.addEventListener('keydown', handleKeyDown)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown', handleKeyDown)
-})
-
 
 //  Inicio de sesion
 import { signInWithPopup , GoogleAuthProvider  } from 'firebase/auth'
@@ -275,12 +239,12 @@ dynamicBodies.push([cubeRef.value, cubeBody])
     <!-- <PointerLockControls /> -->
     <!-- <OrbitControls  /> -->
 
-    <Suspense >
+    <!-- <Suspense >
       <Stones />
     </Suspense >
     <EffectComposer>
       <Bloom v-bind="bloomParams" />
-    </EffectComposer>
+    </EffectComposer> -->
 
     <TresAmbientLight :intensity="2" color="#f1026a"/>
     
@@ -295,17 +259,19 @@ dynamicBodies.push([cubeRef.value, cubeBody])
     </TresMesh>
 
     <!-- Cubos alrededor del cráneo -->
-    <TresMesh v-for="(pos, index) in cubePositions" :key="index" :position="pos" @click="handleCubeClick(index)">
-      <TresBoxGeometry :args="[4, 4, 3]" /> <!-- Hacer los cubos más grandes -->
-     <TresMeshStandardMaterial color="blue" transparent :opacity="0.4" /> <!-- Aplicar transparencia -->
+
+    <!-- <TresMesh v-for="(pos, index) in cubePositions" :key="index" :position="pos" @click="handleCubeClick(index)"> -->
+      <!-- <TresBoxGeometry :args="[4, 4, 3]" /> Hacer los cubos más grandes -->
+     <!-- <TresMeshStandardMaterial color="blue" transparent :opacity="0.4" /> Aplicar transparencia -->
        <!-- Añadir un helper para visualizar la hitbox del cubo -->    
-    </TresMesh>
+
+    <!-- </TresMesh> -->
   
 
 
     <KeyboardControls v-if="canInteract">
     <Suspense >
-      <User :rotation="[2,1.3,4]" :position="catPos" />
+      <User :position="catPos" />
     <!-- :rotation="[gatito.value.x,gatito.value.y,gatito.value.z]" -->
     </Suspense>
     </KeyboardControls>
