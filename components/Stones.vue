@@ -32,7 +32,7 @@ littleStones.forEach((stone) => {
 })
 
 materials.RockLight.emissive = new Color(204,0,204)
-materials.RockLight.emissiveIntensity = 4
+materials.RockLight.emissiveIntensity = 20
 
 console.log(littleStones)
 // inspeccionamos la escena .glb o los objetos(grupo) importados
@@ -42,8 +42,7 @@ console.log({nodes, materials,})
 const { onLoop } = useRenderLoop()
 
 onLoop(({elapsed})=>{
-  materials.RockLight.emissiveIntensity = 
-  Math.sin(elapsed) * 7 + 3
+  materials.RockLight.emissiveIntensity = Math.sin(elapsed) * 7 + 3
 } ) 
 
 </script>

@@ -6,7 +6,6 @@ import { PointerLockControls , KeyboardControls , Sphere , OrbitControls } from 
 import { useControls, TresLeches } from '@tresjs/leches'
 import '@tresjs/leches/styles'
 import { Clock, Vector3 } from 'three'
-
 import { useRenderLoop , vDistanceTo, vAlwaysLookAt } from '@tresjs/core'
 
 import { Stats } from '@tresjs/cientos'
@@ -217,10 +216,9 @@ const enterAsGuest = () => {
   canInteract.value = true
   showOverlay.value = false
 }
+
 // End inicio de sesion
 
-
-// Efectos de brillo
 const bloomParams = reactive({
   luminanceThreshold: 0.3,
   luminanceSmoothing: 0.3,
@@ -228,138 +226,28 @@ const bloomParams = reactive({
   intensity: 0.5,
   blendFunction: BlendFunction.ADD,
 })
-// Fin efectos de brillo
 
-// Fisicas
-import * as THREE from 'three'
-import RAPIER from '@dimforge/rapier3d-compat'
-
-await RAPIER.init() // This line is only needed if using the compat version
-const gravity = new RAPIER.Vector3(0.0, -9.81, 0.0)
-const world = new RAPIER.World(gravity)
-const dynamicBodies: [THREE.Object3D, RAPIER.RigidBody][] = []
-
-
-const floorBody = world.createRigidBody(RAPIER.RigidBodyDesc.fixed().setTranslation(0, -1, 0))
-const floorShape = RAPIER.ColliderDesc.cuboid(50, 0.5, 50)
-world.createCollider(floorShape, floorBody)
-
-console.log("Data del Rapier:  ",world)
-const cubeRef = shallowRef()
-
-const cubeBody = world.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTranslation(0, 5, 0).setCanSleep(false))
-const cubeShape = RAPIER.ColliderDesc.cuboid(10, 10, 1).setMass(2).setRestitution(1.1)
-world.createCollider(cubeShape, cubeBody)
-dynamicBodies.push([cubeRef.value, cubeBody])
-
-
-// Fin fisicas
 </script>
 
 <template>
-  <div v-if="!isAuthenticated && !isGuest" class="login-container">
-    <button @click="loginWithGoogle">Iniciar sesión con Google</button>
-    <button @click="enterAsGuest">Entrar como invitado</button>
-  </div>
-
-  <!-- Capa semi-transparente -->
-  <div v-if="showOverlay" class="overlay">
-    <p>Debes iniciar sesión o entrar como invitado para interactuar con la escena.</p>
-  </div>
-
-  <TresLeches />
   <TresCanvas window-size clear-color="#4f4f4f" shadows alpha >
-    <!-- <TresPerspectiveCamera ref="camRef" /> -->
-    
-    
-    <!-- <PointerLockControls /> -->
-    <!-- <OrbitControls  /> -->
-
-    <Suspense >
-      <Stones />
-    </Suspense >
-    <EffectComposer>
-      <Bloom v-bind="bloomParams" />
-    </EffectComposer>
-
+    <OrbitControls  />
     <TresAmbientLight :intensity="2" color="#f1026a"/>
-    
-    <!-- Modelo del craneo -->
-    <!-- <Suspense >
-      <Cat :position="[0, 5, -30]" :scale="[0.3,0.3,0.3]" :rotation="[4, 0, 0]" :ref="skullRef" />
-    </Suspense> -->
-
-    <TresMesh :ref="cubeRef" :position="[10, 5, 0]" >
-      <TresBoxGeometry :args="[7, 10, 1.5]"/> <!-- Hacer los cubos más grandes -->
-      <TresMeshStandardMaterial color="red" /> <!-- Aplicar transparencia -->
-    </TresMesh>
-
-    <!-- Cubos alrededor del cráneo -->
-    <TresMesh v-for="(pos, index) in cubePositions" :key="index" :position="pos" @click="handleCubeClick(index)">
-      <TresBoxGeometry :args="[4, 4, 3]" /> <!-- Hacer los cubos más grandes -->
-     <TresMeshStandardMaterial color="blue" transparent :opacity="0.4" /> <!-- Aplicar transparencia -->
-       <!-- Añadir un helper para visualizar la hitbox del cubo -->    
-    </TresMesh>
-  
-
-
-    <KeyboardControls v-if="canInteract">
     <Suspense >
       <User :rotation="[2,1.3,4]" :position="catPos" />
-    <!-- :rotation="[gatito.value.x,gatito.value.y,gatito.value.z]" -->
     </Suspense>
-    </KeyboardControls>
-
-    <!-- // Sphere with a custom material transformations -->
-    <!-- <Sphere ref="planeRef" :args="[5, 5, 5]" :position="spherePos" @click="handleSphereClick" color="green" transparent :opacity="0.34"> -->
-      <!-- <TresMeshStandardMaterial color="red" transparent :opacity="0.5" />  -->
-      <!-- Aplicar transparencia -->
-        <!-- Visualizar la hitbox de la esfera -->
-    <!-- </Sphere> -->
-
-    <!-- Suelo/techo -->
+   
     <TresMesh :position="[0, -2, 0]" >
       <TresBoxGeometry :args="[100, 0.8 , 100]" />
       <TresMeshStandardMaterial :color="0x99869d"/>
     </TresMesh>
 
-    <!-- Ghosts -->
-
-    <TresPointLight
-    ref="ghost1"
-    :args="['#ff00ff', 3, 3]"
-    cast-shadow
-  />
-  <TresPointLight
-    ref="ghost2"
-    :args="['#00ffff', 3, 3]"
-    cast-shadow
-  />
-  <TresPointLight
-    ref="ghost3"
-    :args="['#ff7800', 3, 3]"
-    cast-shadow
-  />
-
     <TresGridHelper /> 
     <Stats />
   </TresCanvas>
-  
 </template>
 
 <style>
-.login-container {
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-}
-
 .overlay {
   position: absolute;
   top: 0;

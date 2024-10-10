@@ -1,14 +1,12 @@
 <script lang="ts" setup>
 import { Color, MeshBasicMaterial } from 'three';
-
 const { scene: model , nodes , materials } = await useGLTF('skull-cat.glb')
-
-// import { Sampler  } from '@tresjs/cientos';
-
+// import { Sampler } from '@tresjs/cientos';
 import { modelPosition } from 'three/examples/jsm/nodes/Nodes.js';
+
+
 // Este es el modelo del Craneo del gato
 const littleStones = Object.values(nodes).filter(node => node.name.includes('Object_'))
-
 const gato2 = Object.values(nodes).filter(node => node.name.includes('domestic_cat_(Felis_catus)_43703objcleanermaterialmergergl'))
 
 console.log({"Nodos del Craneo del gato":littleStones})

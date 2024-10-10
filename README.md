@@ -31,5 +31,27 @@ You can rely on GitHub Actions too. More info here: https://medium.com/front-end
 
 More information about buildAssetsDir config: https://github.blog/2009-12-29-bypassing-jekyll-on-github-pages/
 
-
 https://stackblitz.com/@alvarosabu
+
+
+# Extra things
+
+## Auth 
+- [Clever]()
+- [VueFire](https://vuefire.vuejs.org/)
+- [Supabase](https://supabase.com/docs)
+
+## DB 
+- [Turso]()
+- [Firebase]()
+
+### 3D
+- [Tres.js](https://docs.tresjs.org/)
+- [Cientos](https://cientos.tresjs.org/)
+- [Three.js](https://threejs.org/)
+
+
+# Agradecimientos y créditos
+
+- [Ejemplos y componentes en Three | TS ](https://github.com/Sean-Bradley/Three.js-TypeScript-Boilerplate)
+- [Vue Clerk](https://www.vue-clerk.com/)

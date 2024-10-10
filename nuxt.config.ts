@@ -1,19 +1,26 @@
+import wasm from 'vite-plugin-wasm';
+import topLevelAwait from 'vite-plugin-top-level-await'
+
 export default defineNuxtConfig({
   app: {
     baseURL: '/',
     buildAssetsDir: 'assets',
   },
+
   tres: {
     devtools: true,
     glsl: true
   },
-  ssr: false ,
+
+  ssr: false,
+
   modules: [
     '@tresjs/nuxt',
     '@nuxt/devtools',
     '@pinia/nuxt',
     'nuxt-vuefire',
   ],
+
   vuefire:{
     auth:{
       enabled: true,
@@ -29,7 +36,18 @@ export default defineNuxtConfig({
       measurementId: "G-HL8VQD5QKL"
     }
   },
+
   alias: {
     pinia: "/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs"
+  },
+
+  vite: {
+    plugins: [wasm()],
+  },
+
+  devtools: {
+    timeline: {
+      enabled: true,
+    },
   },
 })

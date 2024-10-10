@@ -5,6 +5,12 @@ import { ref } from 'vue'
 import { useAnimations, useGLTF } from '@tresjs/cientos'
 const { scene: model , nodes , materials , animations } = await useGLTF('cat_run.glb')
 
+import { useTresContext, extend } from '@tresjs/core'
+
+const { camera, renderer , controls} = useTresContext()
+
+import { OrbitControls } from 'three/addons/controls/OrbitControls'
+extend({ OrbitControls })
 
 // Este es el modelo del gato que corre
 
@@ -14,7 +20,9 @@ const { scene: model , nodes , materials , animations } = await useGLTF('cat_run
 // console.log({"Nodos del Craneo del gato":littleStones})
 // inspeccionamos la escena .glb o los objetos(grupo) importados
 
-console.log({nodes, materials, model ,animations})
+console.log("Data del Modelo3D",{nodes, materials, model ,animations})
+
+// console.log("Data del context",{controls,renderer,camera})
 
 const { actions } = useAnimations(animations, model)
 
@@ -34,6 +42,10 @@ currentAction.value.play()
 
 </script>
 <template>
+  <TresOrbitControls
+  v-if="renderer"
+  :args="[camera, renderer?.domElement]"
+  />
   <!-- <primitive :object="nodes" /> -->
   <primitive :object="nodes.Armature" />
   <!-- <primitive :object="nodes.reference" :rotation="[1,-5,1]" /> -->
