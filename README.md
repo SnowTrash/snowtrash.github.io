@@ -35,23 +35,37 @@ https://stackblitz.com/@alvarosabu
 
 
 # Extra things
+### Nuxt Modules 
+- [Nuxt Sec - OWASP Top 10 and Helmet](https://nuxt.com/modules/security)
+- [Device detection](https://nuxt.com/modules/device)
 
 ## Auth 
-- [Clever]()
+- [Clerk](https://clerk.com/)
 - [VueFire](https://vuefire.vuejs.org/)
 - [Supabase](https://supabase.com/docs)
 
 ## DB 
-- [Turso]()
-- [Firebase]()
+- [Turso](https://docs.turso.tech)
+- [Firebase](https://firebase.google.com/docs/database?hl=es)
 
 ### 3D
-- [Tres.js](https://docs.tresjs.org/)
-- [Cientos](https://cientos.tresjs.org/)
-- [Three.js](https://threejs.org/)
+- [Three.js - 3D Core Library ](https://threejs.org/)
+- [Tres.js - Three 4 Vue](https://docs.tresjs.org/)
+- [Cientos - Tres Abstractions](https://cientos.tresjs.org/)
+- [Rapier - Physics Rust engine](https://rapier.rs/)
 
+- [Camera ~ THREE.OrbitControls ](https://github.com/yomotsu/camera-controls)
 
-# Agradecimientos y créditos
+### Socket.io
+- [Nuxt-Socket.io](https://nuxt-socket-io.netlify.app/)
 
-- [Ejemplos y componentes en Three | TS ](https://github.com/Sean-Bradley/Three.js-TypeScript-Boilerplate)
-- [Vue Clerk](https://www.vue-clerk.com/)
+### Inverse Kinematics
+- [Closed Chain Inverse Kinematics](https://github.com/gkjohnson/closed-chain-ik-js)
+A generalized inverse kinematics solver that supports closed chains for parallel kinematics systems, dynamic reconfiguration, and arbitrary joint configuration based on damped least squares error minimization techniques
+
+- [FullIK](https://github.com/lo-th/fullik)
+- [Virtual Robotics](https://github.com/boytchev/virtual-robotics)
+
+### IA
+
+- [YUKA - Game AI Agents](https://github.com/Mugen87/yuka)

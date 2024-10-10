@@ -8,6 +8,9 @@
 #### Integrando Vuefire??? apenas integré el popup
    [VueFire](https://vuefire.vuejs.org/)
    [How to Use Firebase Auth with Nuxt 3 🔥 (2024)](https://www.youtube.com/watch?v=pvLlZfVkeWM)
+
+   https://vuefire.vuejs.org/nuxt/getting-started.html
+   
 #### Integrar Pinia?
    [Nuxt 3 + Pinia Tutorial](https://www.youtube.com/watch?v=kqs9oegfZGU)
 
