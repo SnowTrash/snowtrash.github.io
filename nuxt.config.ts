@@ -11,15 +11,7 @@ export default defineNuxtConfig({
     glsl: true
   },
 
-  ssr: true,
-  nitro: {
-    prerender: {
-      failOnError: false,
-      crawlLinks: true,
-      routes: ['/'] // Asegúrate de incluir las rutas que puedes prerender
-    }
-  },
-
+  ssr: false,
   modules: [
     '@tresjs/nuxt',
     '@nuxt/devtools',
