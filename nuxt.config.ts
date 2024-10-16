@@ -5,7 +5,9 @@ export default defineNuxtConfig({
     baseURL: '/',
     buildAssetsDir: 'assets',
   },
-
+  routeRules: {
+    "/": { prerender: false },
+  },
   tres: {
     devtools: true,
     glsl: true
