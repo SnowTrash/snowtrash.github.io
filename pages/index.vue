@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 // import { objectScale } from '@tresjs/cientos/dist/core/misc/html/utils.js';
 import { reactive, ref, watchEffect , shallowRef } from 'vue'
-import { BlendFunction } from 'postprocessing';
+// import { BlendFunction } from 'postprocessing';
 import { PointerLockControls , KeyboardControls , Sphere , OrbitControls } from '@tresjs/cientos'
 import { useControls, TresLeches } from '@tresjs/leches'
 import '@tresjs/leches/styles'
