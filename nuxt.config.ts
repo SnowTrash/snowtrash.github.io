@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     '@tresjs/nuxt',
     '@nuxt/devtools',
     '@pinia/nuxt',
-    'nuxt-vuefire',
+    'nuxt-vuefire'
   ],
 
   vuefire:{
@@ -36,7 +36,9 @@ export default defineNuxtConfig({
       measurementId: "G-HL8VQD5QKL"
     }
   },
-
+  nitro: {
+    prerender: { } 
+  },
   alias: {
     pinia: "/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs"
   },
