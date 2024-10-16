@@ -13,6 +13,9 @@ export default defineNuxtConfig({
   },
 
   ssr: false,
+  generate: {
+    routes: "404.html"
+  },
 
   modules: [
     '@tresjs/nuxt',
