@@ -12,8 +12,8 @@ export default defineNuxtConfig({
     devtools: true,
     glsl: true
   },
-
   ssr: false,
+  nitro: {prerender:{failOnError:false,}},
   modules: [
     '@tresjs/nuxt',
     '@nuxt/devtools',
