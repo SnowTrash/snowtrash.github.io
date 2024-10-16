@@ -36,13 +36,6 @@ export default defineNuxtConfig({
       measurementId: "G-HL8VQD5QKL"
     }
   },
-  nitro: {
-    prerender: {
-      routes: [], // No need to prerender any routes
-      crawlLinks: false, // Disable link crawling for prerender
-      autoSubfolderIndex: false, // Disable automatic subfolder indexing
-    },
-  },
   alias: {
     pinia: "/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs"
   },
