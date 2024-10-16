@@ -3,7 +3,7 @@ import wasm from 'vite-plugin-wasm';
 
 export default defineNuxtConfig({
   app: {
-    baseURL: '/snowtrash.github.io',
+    baseURL: '/',
     buildAssetsDir: 'assets',
   },
 
