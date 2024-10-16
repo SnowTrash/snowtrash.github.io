@@ -1,9 +1,8 @@
 import wasm from 'vite-plugin-wasm';
-// import topLevelAwait from 'vite-plugin-top-level-await'
 
 export default defineNuxtConfig({
   app: {
-    baseURL: '/',
+    baseURL: '/snowtrash.github.io/',
     buildAssetsDir: 'assets',
   },
 
@@ -12,9 +11,13 @@ export default defineNuxtConfig({
     glsl: true
   },
 
-  ssr: false,
-  generate: {
-    routes: "404.html"
+  ssr: true,
+  nitro: {
+    prerender: {
+      failOnError: false,
+      crawlLinks: true,
+      routes: ['/'] // Asegúrate de incluir las rutas que puedes prerender
+    }
   },
 
   modules: [

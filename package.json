@@ -6,7 +6,7 @@
     "generate": "nuxi generate",
     "preview": "nuxi preview",
     "postinstall": "nuxi prepare",
-    "deploy": "gh-pages --dotfiles -d .output/public -t true"
+    "deploy": "gh-pages --dotfiles -d .output/public"
   },
   "devDependencies": {
     "@dimforge/rapier3d": "^0.14.0",

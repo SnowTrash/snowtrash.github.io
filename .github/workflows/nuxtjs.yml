@@ -59,6 +59,12 @@ jobs:
           #
           # You may remove this line if you want to manage the configuration yourself.
           static_site_generator: nuxt
+      - name: Clear cache
+        run: |
+          rm -rf dist
+          rm -rf .nuxt
+      - name: Install dependencies
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Restore cache
         uses: actions/cache@v4
         with:
