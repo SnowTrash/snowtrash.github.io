@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     glsl: true
   },
 
-  ssr: true,
+  ssr: false,
 
   modules: [
     '@tresjs/nuxt',
@@ -37,16 +37,10 @@ export default defineNuxtConfig({
     }
   },
   nitro: {
-    prerender: {   
-      autoSubfolderIndex: true,
-      concurrency: 1,
-      interval: 0,
-      failOnError: true,
-      crawlLinks: false,
-      ignore: [],
-      routes: [],
-      retry: 2,
-      retryDelay: 500}
+    prerender: {
+      routes: [], // No need to prerender routes in SPA mode
+      failOnError: false, // Prevent build failure due to prerender errors
+    },
   },
   alias: {
     pinia: "/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs"
