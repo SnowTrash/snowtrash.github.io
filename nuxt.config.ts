@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     glsl: true
   },
 
-  ssr: false,
+  ssr: true,
 
   modules: [
     '@tresjs/nuxt',
