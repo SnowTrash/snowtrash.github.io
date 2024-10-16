@@ -38,8 +38,9 @@ export default defineNuxtConfig({
   },
   nitro: {
     prerender: {
-      routes: [], // No need to prerender routes in SPA mode
-      failOnError: false, // Prevent build failure due to prerender errors
+      routes: [], // No need to prerender any routes
+      crawlLinks: false, // Disable link crawling for prerender
+      autoSubfolderIndex: false, // Disable automatic subfolder indexing
     },
   },
   alias: {
