@@ -4,7 +4,6 @@ const { scene: model , nodes , materials } = await useGLTF('skull-cat.glb')
 // import { Sampler } from '@tresjs/cientos';
 import { modelPosition } from 'three/examples/jsm/nodes/Nodes.js';
 
-
 // Este es el modelo del Craneo del gato
 const littleStones = Object.values(nodes).filter(node => node.name.includes('Object_'))
 const gato2 = Object.values(nodes).filter(node => node.name.includes('domestic_cat_(Felis_catus)_43703objcleanermaterialmergergl'))
@@ -12,7 +11,6 @@ const gato2 = Object.values(nodes).filter(node => node.name.includes('domestic_c
 console.log({"Nodos del Craneo del gato":littleStones})
 // inspeccionamos la escena .glb o los objetos(grupo) importados
 console.log({nodes, materials,})
-
 
 // gato2.material = MeshBasicMaterial
 
@@ -24,6 +22,17 @@ console.log({nodes, materials,})
 //   Math.sin(elapsed) * 7 + 3
 // } ) 
 
+
+
+
+
+// Este es un comentario del modelo del gato que corre
+// const littleStones = Object.values(nodes).filter(node => node.name.includes('Object_'))
+// const gato2 = Object.values(nodes).filter(node => node.name.includes('domestic_cat_(Felis_catus)_43703objcleanermaterialmergergl'))
+
+// console.log({"Nodos del Craneo del gato":littleStones})
+// inspeccionamos la escena .glb o los objetos(grupo) importados
+// Fin del comentario
 </script>
 <template>
 <!-- <Sampler :count="50" > -->

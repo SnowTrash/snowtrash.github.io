@@ -19,14 +19,6 @@ const ghost1 = shallowRef(null)
 const ghost2 = shallowRef(null)
 const ghost3 = shallowRef(null)
 
-// Posiciones de los cubos
-const cubePositions = [
-  new Vector3(3, 0, 3),
-  new Vector3(-3, 0, 3),
-  new Vector3(0, 0, -3)
-]
-
-
 // Tres leches
 const { awiwi, slider, rotation , gatito} = useControls({
   awiwi: true,
@@ -51,83 +43,10 @@ const { awiwi, slider, rotation , gatito} = useControls({
 //   // console.log(rotation.value.value.x)
 // })
 
-
-// Handler para las interacciones del modelo y la escena
-// Mostrar luces cuando el gato esté cerca
-// Función para manejar el clic en los cubos
-
-const handleCubeClick = (cubeIndex: number) => {
-  if(isNearObject(cubePositions[cubeIndex], 3)){
-    alert(`Cubo ${cubeIndex + 1} clickeado`)
-  }
-  // triggerCinematicCamera(cubeIndex) // Acción al clic
-}
-
-const smoothLookAt = (camera, target, factor = 0.1) => {
-  const direction = new Vector3().subVectors(target, camera.position).normalize()
-  camera.position.lerp(target, factor)
-  camera.lookAt(target)
-}
-
-// const gatoRef = shallowRef(null)
-
-const spherePos = new Vector3(5, 0.9, -15) // posición de la esfera
-const isNearObject = (objectPos: Vector3, threshold: number) => {
-  return catPos.value.distanceTo(objectPos) < threshold
-}
-// Manejar el clic en la esfera
-// const handleSphereClick = () => {
-//   if (isNearObject(spherePos, 4)) { // Si el gato está a menos de 2 unidades de la esfera
-//     console.log('El gato está cerca de la esfera')
-//     SpheretriggerCinematicCamera()
-//   }
-// }
-
-var relo = new Clock;
-    relo.start();
-// Cambiar la cámara para una vista cinemática
-const SpheretriggerCinematicCamera = () => {
-  if (camRef.value && catPos.value) {
-    var elapsed = relo.getElapsedTime();
-    const radius = 150; // Radio de la espiral
-    const heightFactor = 30; // Controla cuánto varía la altura
-    const angleSpeed = 0.3; // Velocidad angular de la espiral
-
-    // Calcula el ángulo en base al tiempo transcurrido
-    const angle = elapsed * angleSpeed;
-
-    // Calcula las coordenadas de la cámara usando trigonometría
-    const x = Math.cos(angle) * radius;
-    const z = Math.sin(angle) * radius;
-    const y = heightFactor * Math.sin(angle); // Variación en el eje Y para dar el efecto de espiral
-
-    // Actualiza la posición de la cámara con el desplazamiento circular
-    camRef.value.position.set(x + catPos.value.x, y + catPos.value.y , z + catPos.value.z); // Desplazamiento de la cámara
-
-    // La cámara siempre mira al gato
-    camRef.value.lookAt(catPos.value);
-    camRef.value.updateProjectionMatrix(); // Actualiza la matriz de proyección
-  }  
-  if (camRef.value) {
-    // Mover la cámara hacia la esfera y cambiar FOV
-    camRef.value.position.set(spherePos.x , spherePos.y - 2 , spherePos.z + 1) // posición frente a la esfera
-    camRef.value.lookAt(spherePos) // que apunte hacia la esfera
-    camRef.value.fov = 30 // cambiar el FOV para efecto cinemático
-    camRef.value.updateProjectionMatrix() // actualizar la matriz de proyección de la cámara
-  }
-}
-// End interacciones y cinematica inicial, solo se acerca la camara
-
-// Main Loop?
+// Main Loop
 const { onLoop } = useRenderLoop()
 onLoop(({ elapsed }) => {
-  // Actualizar posición de la cámara en cada loop
-  if (camRef.value && catPos.value) {
-    const cameraOffset = new Vector3(0, 5, 10) // Ajusta la distancia de la cámara aquí
-    camRef.value.position.lerp(catPos.value.clone().add(cameraOffset), 0.1) // Usa lerp para movimiento suave
-    camRef.value.lookAt(catPos.value) // Siempre mira hacia el gato
-  }
-  // triggerLightNearCube() // Verificar si el gato está cerca de algún cubo
+
   const ghost1Angle = elapsed * 0.5
   const ghost2Angle = -elapsed * 0.32
   const ghost3Angle = -elapsed * 0.18
@@ -142,11 +61,6 @@ onLoop(({ elapsed }) => {
     ghost3.value.position.x = Math.cos(ghost3Angle) * (7 + Math.sin(elapsed * 0.32))
     ghost3.value.position.z = Math.sin(ghost3Angle) * (7 + Math.sin(elapsed * 0.5))
     ghost3.value.position.y = Math.sin(elapsed * 4) + Math.sin(elapsed * 2.5)
-
-    // camRef.value.position.x = ghost3.value.position.x
-    // console.log("Valor camera: " + camRef.value.position.x)
-    // console.log("Valor gatomodel: " + catPos.value.position)
-    // camRef.value.lookAt(catPos.value.position);
  }
 })
 
@@ -158,10 +72,8 @@ const isAuthenticated = ref(false)
 const isGuest = ref(false)
 const canInteract = ref(false)
 const showOverlay = ref(true) // Mostrar capa opaca
-
 // Autenticación con Google
 const auth = useFirebaseAuth()
-
 function loginWithGoogle() {
   signInWithPopup(auth, new GoogleAuthProvider())
     .then(() => {
@@ -173,7 +85,6 @@ function loginWithGoogle() {
       console.error('Error en el inicio de sesión con Google', error)
     })
 }
-
 // Ingresar como invitado
 const enterAsGuest = () => {
   isGuest.value = true
@@ -184,15 +95,12 @@ const enterAsGuest = () => {
 // End inicio de sesion
 
 
-// Efectos de brillo
-const bloomParams = reactive({
-  luminanceThreshold: 0.3,
-  luminanceSmoothing: 0.3,
-  mipmapBlur: true,
-  intensity: 0.5,
-  blendFunction: BlendFunction.ADD,
-})
-// Fin efectos de brillo
+// Posiciones de los cubos
+const cubePositions = [
+  new Vector3(3, 0, 3),
+  new Vector3(-3, 0, 3),
+  new Vector3(0, 0, -3)
+]
 
 // Fisicas
 import * as THREE from 'three'
@@ -202,7 +110,6 @@ await RAPIER.init() // This line is only needed if using the compat version
 const gravity = new RAPIER.Vector3(0.0, -9.81, 0.0)
 const world = new RAPIER.World(gravity)
 const dynamicBodies: [THREE.Object3D, RAPIER.RigidBody][] = []
-
 
 const floorBody = world.createRigidBody(RAPIER.RigidBodyDesc.fixed().setTranslation(0, -1, 0))
 const floorShape = RAPIER.ColliderDesc.cuboid(50, 0.5, 50)
@@ -215,9 +122,8 @@ const cubeBody = world.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTransla
 const cubeShape = RAPIER.ColliderDesc.cuboid(10, 10, 1).setMass(2).setRestitution(1.1)
 world.createCollider(cubeShape, cubeBody)
 dynamicBodies.push([cubeRef.value, cubeBody])
-
-
 // Fin fisicas
+
 </script>
 
 <template>
@@ -225,72 +131,20 @@ dynamicBodies.push([cubeRef.value, cubeBody])
     <button @click="loginWithGoogle">Iniciar sesión con Google</button>
     <button @click="enterAsGuest">Entrar como invitado</button>
   </div>
-
   <!-- Capa semi-transparente -->
   <div v-if="showOverlay" class="overlay">
     <p>Debes iniciar sesión o entrar como invitado para interactuar con la escena.</p>
   </div>
+<!-- Este debería ser un componente junto al modal, que pueda contener los distintos botones de Auth o registrarse -->
 
+<!-- Escena 3D -->
   <TresLeches />
   <TresCanvas window-size clear-color="#4f4f4f" shadows alpha >
-    <!-- <TresPerspectiveCamera ref="camRef" /> -->
-    
-    
-    <!-- <PointerLockControls /> -->
-    <!-- <OrbitControls  /> -->
-
-    <!-- <Suspense >
-      <Stones />
-    </Suspense >
-    <EffectComposer>
-      <Bloom v-bind="bloomParams" />
-    </EffectComposer> -->
-
-    <TresAmbientLight :intensity="2" color="#f1026a"/>
-    
-    <!-- Modelo del craneo -->
-    <!-- <Suspense >
-      <Cat :position="[0, 5, -30]" :scale="[0.3,0.3,0.3]" :rotation="[4, 0, 0]" :ref="skullRef" />
-    </Suspense> -->
-
-    <TresMesh :ref="cubeRef" :position="[10, 5, 0]" >
-      <TresBoxGeometry :args="[7, 10, 1.5]"/> <!-- Hacer los cubos más grandes -->
-      <TresMeshStandardMaterial color="red" /> <!-- Aplicar transparencia -->
-    </TresMesh>
-
-    <!-- Cubos alrededor del cráneo -->
-
-    <!-- <TresMesh v-for="(pos, index) in cubePositions" :key="index" :position="pos" @click="handleCubeClick(index)"> -->
-      <!-- <TresBoxGeometry :args="[4, 4, 3]" /> Hacer los cubos más grandes -->
-     <!-- <TresMeshStandardMaterial color="blue" transparent :opacity="0.4" /> Aplicar transparencia -->
-       <!-- Añadir un helper para visualizar la hitbox del cubo -->    
-
-    <!-- </TresMesh> -->
-  
-
-
-    <KeyboardControls v-if="canInteract">
-    <Suspense >
-      <User :position="catPos" />
-    <!-- :rotation="[gatito.value.x,gatito.value.y,gatito.value.z]" -->
-    </Suspense>
-    </KeyboardControls>
-
-    <!-- // Sphere with a custom material transformations -->
-    <!-- <Sphere ref="planeRef" :args="[5, 5, 5]" :position="spherePos" @click="handleSphereClick" color="green" transparent :opacity="0.34"> -->
-      <!-- <TresMeshStandardMaterial color="red" transparent :opacity="0.5" />  -->
-      <!-- Aplicar transparencia -->
-        <!-- Visualizar la hitbox de la esfera -->
-    <!-- </Sphere> -->
-
-    <!-- Suelo/techo -->
-    <TresMesh :position="[0, -2, 0]" >
-      <TresBoxGeometry :args="[100, 0.8 , 100]" />
-      <TresMeshStandardMaterial :color="0x99869d"/>
-    </TresMesh>
+  <TresPerspectiveCamera :args="[45, 1, 0.1, 1000]" :position="[0,10,9]" />
+  <Stats />
+  <TresGridHelper /> 
 
     <!-- Ghosts -->
-
     <TresPointLight
     ref="ghost1"
     :args="['#ff00ff', 3, 3]"
@@ -306,11 +160,37 @@ dynamicBodies.push([cubeRef.value, cubeBody])
     :args="['#ff7800', 3, 3]"
     cast-shadow
   />
+  <!-- Suelo/techo -->
+  <TresMesh :position="[0, -2, 0]" >
+    <TresBoxGeometry :args="[100, 0.8 , 100]" />
+    <TresMeshStandardMaterial :color="0xa8def0"/>
+  </TresMesh>
 
-    <TresGridHelper /> 
-    <Stats />
-  </TresCanvas>
+    <TresAmbientLight :intensity="0.5" color="#f1026a"/>
+
+    <TresDirectionalLight
+    cast-shadow
+    :position="[0, 2, 0]"
+    :intensity="1"
+  />
   
+    <!-- Modelo del craneo -->
+    <!-- <Suspense >
+      <Cat :position="[0, 5, -30]" :scale="[0.3,0.3,0.3]" :rotation="[4, 0, 0]" :ref="skullRef" />
+    </Suspense> -->
+
+    <TresMesh :ref="cubeRef" :position="[10, 5, 0]" >
+      <TresBoxGeometry :args="[7, 10, 1.5]"/> <!-- Hacer los cubos más grandes -->
+      <TresMeshStandardMaterial color="red" /> <!-- Aplicar transparencia -->
+    </TresMesh>
+
+    <KeyboardControls v-if="canInteract">
+    <Suspense >
+      <User :position="catPos" />
+    <!-- :rotation="[gatito.value.x,gatito.value.y,gatito.value.z]" -->
+    </Suspense>
+    </KeyboardControls>
+  </TresCanvas>
 </template>
 
 <style>

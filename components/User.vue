@@ -1,108 +1,82 @@
 <script lang="ts" setup>
-// import { Color, MeshBasicMaterial } from 'three';
+import { Clock } from 'three';
 import { ref } from 'vue'
 import { useAnimations, useGLTF } from '@tresjs/cientos'
-
 const { scene: model , nodes , materials , animations } = await useGLTF('Soldier.glb')
 
 import { useTresContext, extend } from '@tresjs/core'
-
 const { camera, renderer , controls} = useTresContext()
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls'
 extend({ OrbitControls })
 
-// Este es el modelo del gato que corre
-
-// const littleStones = Object.values(nodes).filter(node => node.name.includes('Object_'))
-// const gato2 = Object.values(nodes).filter(node => node.name.includes('domestic_cat_(Felis_catus)_43703objcleanermaterialmergergl'))
-
-// console.log({"Nodos del Craneo del gato":littleStones})
-// inspeccionamos la escena .glb o los objetos(grupo) importados
+const orbitsRef = shallowRef();
 
 console.log("Data del Modelo3D",{nodes, materials, model ,animations})
 console.log("Data del context",{controls,renderer,camera})
 
-
 // MODEL WITH ANIMATIONS
-import { CharacterControls } from '~/utils/characterControls';
-import { AnimationAction } from 'three';
-
-var characterControls: CharacterControls
-
 const { actions , mixer} = useAnimations(animations, model)
-
-const currentAction = ref(actions.Run)
-
+const currentAction = ref(actions.Walk)
 // currentAction.value.play()
 
 // gato2.material = MeshBasicMaterial
 
-// Animación de luces mediante el loop
-// const { onLoop } = useRenderLoop()
+// Animación de updateCamera() mediante el loop
+const clock = new Clock();
+const { onLoop } = useRenderLoop()
 
-// onLoop(({elapsed})=>{
-//   materials.RockLight.emissiveIntensity = 
-//   Math.sin(elapsed) * 7 + 3
-// } ) 
+onLoop(({})=>{
+  let mixerUpdateDelta = clock.getDelta();
+  if (characterControls) {
+        characterControls.update(mixerUpdateDelta,keysPressed);
+  }
+  // characterControls?.updateCamera()
+})
 
 import { Vector3 } from 'three'
 const catPos = shallowRef(new Vector3(0, 0.5, 0)) // Initialize cat position
+// Import custom control class
+import { CharacterControls } from '../utils/characterControls'; // Assuming you create a file to handle it
+let characterControls: CharacterControls | null = null;
 
+// CONTROL KEYS
 import { KeyDisplay } from '../utils/index';
-
+const keysPressed = {  }
 const keyDisplayQueue = new KeyDisplay();
 const handleKeyDown = (event: KeyboardEvent) => {
-    keyDisplayQueue.down(event.key)
-    switch (event.key) {
-      case 'w': moveCat(new Vector3(0, 0, -0.1)); break
-      case 's': moveCat(new Vector3(0, 0, 0.13)); break
-      case 'a': moveCat(new Vector3(-0.13, 0, 0)); break
-      case 'd': moveCat(new Vector3(0.1, 0, 0)); break
-      case 'x': currentAction.value.play(); break
-    }
-    // if (event.shiftKey && characterControls) {
-    //     characterControls.switchRunToggle()
-    // }
+  keyDisplayQueue.down(event.key)
+  if (event.shiftKey && characterControls) {
+        characterControls.switchRunToggle();
+  } else {
+    (keysPressed as any)[event.key.toLowerCase()] = true;
+  }
 }
 const handleKeyUp = (event: KeyboardEvent) => {
     keyDisplayQueue.up(event.key);
-    // switch (event.key) {
-    //   case 'w': moveCat(new Vector3(0, 0, -0.1)); break
-    //   case 's': moveCat(new Vector3(0, 0, 0.13)); break
-    //   case 'a': moveCat(new Vector3(-0.13, 0, 0)); break
-    //   case 'd': moveCat(new Vector3(0.1, 0, 0)); break
-    // }
+    (keysPressed as any)[event.key.toLowerCase()] = false;
 }
-
 onMounted(() => {
+  characterControls = new CharacterControls(model, mixer ,actions, orbitsRef.value ,camera.value, 'Idle'); // Pass camera, model & animations y la posicion del gato
   window.addEventListener('keydown', handleKeyDown)
   window.addEventListener('keyup', handleKeyUp)
 })
-
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeyDown)
   window.removeEventListener('keyup', handleKeyUp)
 })
-
-// Handle keyboard controls in client-side lifecycle
-const moveCat = (direction: Vector3) => {
-    catPos.value.add(direction)
-    // Mueve la cámara suavemente hacia la nueva posición
-    // const cameraOffset = new Vector3(0, 5, 10)
-    // smoothLookAt(camRef.value, catPos.value.clone().add(cameraOffset))
-}
 
 </script>
 <template>
   <TresOrbitControls
   v-if="renderer"
   :args="[camera, renderer?.domElement]"
+  :minDistance="5"
+  :maxDistance="15"
+  :enablePan="false"
+  :maxPolarAngle="Math.PI / 2 - 0.05"
+  :enableDamping="true"
+  ref="orbitsRef"
   />
   <primitive :object="model" />
-  
-  <!-- cat -->
-  <!-- <primitive :object="nodes.Armature" /> -->
-
-  <!-- <primitive :object="nodes.reference" :rotation="[1,-5,1]" /> -->
 </template>
