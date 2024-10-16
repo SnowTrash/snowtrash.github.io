@@ -37,8 +37,16 @@ export default defineNuxtConfig({
     }
   },
   nitro: {
-    prerender: { crawlLinks: false,
-                  failOnError:false}
+    prerender: {   
+      autoSubfolderIndex: true,
+      concurrency: 1,
+      interval: 0,
+      failOnError: true,
+      crawlLinks: false,
+      ignore: [],
+      routes: [],
+      retry: 2,
+      retryDelay: 500}
   },
   alias: {
     pinia: "/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs"
