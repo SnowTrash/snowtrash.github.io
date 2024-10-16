@@ -15,9 +15,9 @@ const catPos = shallowRef(new Vector3(0, 0.5, 0)) // Initialize cat position
 const skullRef = shallowRef()
 const camRef = shallowRef()
 
-const ghost1 = shallowRef(null)
-const ghost2 = shallowRef(null)
-const ghost3 = shallowRef(null)
+const ghost1 = shallowRef()
+const ghost2 = shallowRef()
+const ghost3 = shallowRef()
 
 // Tres leches
 const { awiwi, slider, rotation , gatito} = useControls({
@@ -65,7 +65,7 @@ onLoop(({ elapsed }) => {
 })
 
 //  Inicio de sesion
-import { signInWithPopup , GoogleAuthProvider  } from 'firebase/auth'
+import { signInWithPopup , GoogleAuthProvider, getAuth } from 'firebase/auth'
 // import { } from 'firebase/auth/web-extension';
 // Estados de autenticación
 const isAuthenticated = ref(false)
@@ -73,7 +73,7 @@ const isGuest = ref(false)
 const canInteract = ref(false)
 const showOverlay = ref(true) // Mostrar capa opaca
 // Autenticación con Google
-const auth = useFirebaseAuth()
+const auth = getAuth()
 function loginWithGoogle() {
   signInWithPopup(auth, new GoogleAuthProvider())
     .then(() => {

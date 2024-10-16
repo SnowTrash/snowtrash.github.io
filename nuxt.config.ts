@@ -18,7 +18,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-vuefire'
   ],
-
   vuefire:{
     auth:{
       enabled: true,
