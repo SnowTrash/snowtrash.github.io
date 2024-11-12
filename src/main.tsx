@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom/client'
 import { ACESFilmicToneMapping, SRGBColorSpace } from 'three'
 import { Scene } from './Scene'
 import './styles/main.css'
+import { onPlayerJoin, insertCoin, isHost, myPlayer } from "playroomkit";
+
 
 function Main() {
   return (
@@ -43,8 +45,13 @@ function Main() {
   )
 }
 
+
+insertCoin({
+  skipLobby: true,
+}).then(() => 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Main />
   </React.StrictMode>
 )
+);

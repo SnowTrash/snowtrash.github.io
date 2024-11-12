@@ -1,4 +1,4 @@
-import { OrbitControls } from '@react-three/drei'
+import { Box, CameraControls, OrbitControls } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useControls } from 'leva'
 import { Perf } from 'r3f-perf'
@@ -7,6 +7,10 @@ import { BoxGeometry, Mesh, MeshBasicMaterial } from 'three'
 import { Cube } from './components/Cube'
 import { Plane } from './components/Plane'
 import { Sphere } from './components/Sphere'
+
+// Playrooom & 3D Lobby
+import { Lobby } from './components/Lobby'
+import { usePlayersList } from 'playroomkit'
 
 function Scene() {
   const { performance } = useControls('Monitoring', {
@@ -25,10 +29,14 @@ function Scene() {
     }
   })
 
+  // players array
+  const controls = useRef();
+  const players = usePlayersList(true);
+
   return (
     <>
       {performance && <Perf position='top-left' />}
-
+      <CameraControls ref={controls.current} />
       <OrbitControls makeDefault />
 
       <directionalLight
@@ -39,9 +47,19 @@ function Scene() {
       />
       <ambientLight intensity={0.2} />
 
+      {players.map((player,index) => (
+        <group key={player.id} position={[0,index * 2, 0]}>
+          <Box>
+            <meshBasicMaterial color={"red"}/>
+          </Box>
+        </group>
+      ))}
+      {/* Loaded Scene */}
+      <Lobby />
+
       <Cube ref={cubeRef} />
       <Sphere />
-      <Plane />
+      {/* <Plane /> */}
     </>
   )
 }
