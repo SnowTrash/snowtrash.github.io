@@ -6,6 +6,7 @@ import { ACESFilmicToneMapping, SRGBColorSpace } from 'three'
 import { Scene } from './Scene'
 import './styles/main.css'
 import { onPlayerJoin, insertCoin, isHost, myPlayer } from "playroomkit";
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 
 function Main() {
@@ -35,11 +36,15 @@ function Main() {
           fov: 55,
           near: 0.1,
           far: 200,
-          position: [3, 2, 9],
+          position: [-7.8, 3, 12.5],
         }}
         shadows
       >
         <Scene />
+
+        <EffectComposer>
+        <Bloom luminanceThreshold={1} intensity={4} />
+      </EffectComposer>
       </Canvas>
     </div>
   )

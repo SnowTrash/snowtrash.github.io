@@ -25,3 +25,26 @@
 ## Videos 4 Building
 
 [Build a Multiplayer Game Lobby with R3F & Playroom](https://www.youtube.com/watch?v=1-7PY08aRM0)
+
+
+
+
+### Assets used
+
+<!-- License: CC Attribution-NonCommercial -->
+[Mage cat (Hand Painted)](https://sketchfab.com/3d-models/mage-cat-hand-painted-f6634b5fae36492db1c82d1b8c77affc)
+[Artstation - Minh Nguyen ](https://www.artstation.com/minh_nguyen_2004)
+
+<!-- License: CC Attribution  -->
+[Cat [Murdered: Soul Suspect]](https://sketchfab.com/3d-models/cat-murdered-soul-suspect-836312def1b84e588866500a2bf79f0f)
+[SMFLab - mark2580](https://sfmlab.com/project/b53a113e-c755-4179-9735-37332948644d/)
+[Steam - mark2580](https://steamcommunity.com/sharedfiles/filedetails/?id=1095995004)
+
+<!-- License: CC Attribution  -->
+[Toon Cat FREE - Omabuarts Studio](https://sketchfab.com/3d-models/toon-cat-free-b2bd1ee7858444bda366110a2d960386)
+
+
+
+[FREE FIRE CLOCKTOWER 3D MODEL BY FFXN](https://sketchfab.com/3d-models/free-fire-clocktower-3d-model-by-ffxn-3d5ab27edca545df80b1fa74b1bb4f58)
+
+[Seashell — FREE](https://sketchfab.com/3d-models/seashell-free-b91a711b424c47779c3f39dc1d1b0564)

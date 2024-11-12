@@ -4,20 +4,21 @@ import { useEffect } from "react";
 export const Lobby = () => {
   // Adding scene 
   const { scene } = useGLTF("models/MarketScene.glb")
-  useEffect(() => {
-    scene.traverse((child) => {
-      if(child.isObject3D){
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-  }, [scene]);
+
+  // useEffect(() => {
+  //   scene.traverse((child) => {
+  //     if(child.isObject3D){
+  //       child.castShadow = true;
+  //       child.receiveShadow = true;
+  //     }
+  //   });
+  // }, [scene]);
 
   return(
     <>
-    <primitive object={scene} scale={25} />
+    <primitive object={scene} scale={25} position={[2.5, 0, -1.2]}/>
     </>
   )
 }
 
-useGLTF.preload("models/MarketScene.glb")
+useGLTF.preload("models/Lobby_clocktower.glb")
