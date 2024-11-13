@@ -15,14 +15,14 @@
     "@react-three/fiber": "^8.17.10",
     "@react-three/postprocessing": "^2.16.3",
     "@react-three/rapier": "^1.5.0",
-    "@types/three": "^0.169.0",
+    "@types/three": "^0.170.0",
     "jotai": "^2.10.2",
     "leva": "^0.9.35",
     "playroomkit": "^0.0.83",
     "r3f-perf": "^7.2.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "three": "^0.169.0"
+    "three": "^0.170.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.11",
