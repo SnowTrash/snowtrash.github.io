@@ -7,11 +7,13 @@ import { Scene } from './Scene'
 import './styles/main.css'
 import { onPlayerJoin, insertCoin, isHost, myPlayer } from "playroomkit";
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import { UI } from './components/UI'
 
 
 function Main() {
   return (
     <div className='main'>
+      
       <Leva
         collapsed={false}
         oneLineLabels={false}
@@ -25,6 +27,9 @@ function Main() {
           },
         }}
       />
+
+<UI />  
+
       <Canvas
         dpr={[1, 2]}
         gl={{

@@ -3,24 +3,26 @@ import { useEffect } from "react";
 import { degToRad } from "three/src/math/MathUtils"
 import { Mesh } from "three";
 
+import { myPlayer, usePlayersList } from "playroomkit";
+const me = myPlayer();
+
 export const CAT_MODELS =[
-    "toon",
     "mage",
+    "toon",
     "animated",
     "normal"
 ];
 
-const cat_scales =[
-    "0.2",
-    "0.6",
-    "0.7",
-    "0.4"
-];
+const cat_scales = {
+    "toon": 0.007,
+    "mage": 0.6,
+    "animated": 0.17,
+    "normal": 0.08
+};
 
 // El gato mago tiene un material en los ojos para aplicar un Post Processing   
-
 export const Cat = ({
-    type = CAT_MODELS[1],
+    type = CAT_MODELS[0],
     ...props
  
 }) =>{
@@ -41,7 +43,7 @@ export const Cat = ({
 
     return(
         <group {...props}>
-            <Clone object={scene} rotation-y={degToRad(0)} scale={Number(cat_scales[1])}/>
+            <Clone object={scene} rotation-y={degToRad(0)} scale={Number(cat_scales[type])}/>
         </group>
     )
 }

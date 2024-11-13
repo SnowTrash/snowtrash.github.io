@@ -1,4 +1,4 @@
-import { Box, CameraControls, OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { Billboard, CameraControls, OrbitControls, PerspectiveCamera , Text , Image} from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useControls } from 'leva'
 import { Perf } from 'r3f-perf'
@@ -13,8 +13,16 @@ import { Sphere } from './components/Sphere'
 
 // Playrooom & 3D Lobby
 import { Lobby } from './components/Lobby'
-import { usePlayersList } from 'playroomkit'
+import { myPlayer, usePlayersList } from 'playroomkit'
 import { Cat } from './components/Cat'
+
+// player highligt
+import { degToRad } from "three/src/math/MathUtils";
+
+// Name editing state
+import { atom , useAtom  } from "jotai";
+import { NameEditingAtom } from './components/UI';
+
 
 function Scene() {
   const { performance } = useControls('Monitoring', {
@@ -27,11 +35,11 @@ function Scene() {
 
   const cubeRef = useRef<Mesh<BoxGeometry, MeshBasicMaterial>>(null)
 
-  useFrame((_, delta) => {
-    if (animate) {
-      cubeRef.current!.rotation.y += delta / 3
-    }
-  })
+  // useFrame((_, delta) => {
+  //   if (animate) {
+  //     cubeRef.current!.rotation.y += delta / 3
+  //   }
+  // })
 
   // players array
   const controls = useRef<CameraControls | null>(null);
@@ -74,8 +82,14 @@ function Scene() {
     const radius = 7; // Radio del círculo
     const x = Math.cos(angle) * radius;
     const z = Math.sin(angle) * radius;
-    return new Vector3( x, 0, z); 
+    return new Vector3( x, -3, z); 
   }
+
+  const me = myPlayer();
+
+
+  
+  const [_nameEditing, setNameEditing] = useAtom(NameEditingAtom);
 
   return (
     <>
@@ -95,17 +109,83 @@ function Scene() {
 
       {/* LOAD PLAYERS */}
       {players.map((player,index) => (
-        
         <group key={player.id} position={calculatePosition(index)}>
-          <Cat />
+          {/* Texto con la opcion de editable  */}
+            <Billboard position-y={2.9} position-x={0.5}>
+              <Text fontSize={0.34} anchorX={"right"}>
+                {player.getState("name") || player.getState("profile").name}
+                <meshBasicMaterial color="white" />
+              </Text>
+              <Text
+                fontSize={0.34}
+                anchorX={"right"}
+                position-x={0.02}
+                position-y={-0.02}
+                position-z={-0.01}
+              >
+                {player.getState("name") || player.getState("profile").name}
+                <meshBasicMaterial color="black" transparent opacity={0.8} />
+              </Text>
+
+              {player.id === me?.id && (
+                <>
+                <Image
+                    onClick={() => setNameEditing(true)}
+                    position-x={0.2}
+                    scale={0.3}
+                    url="images/edit.png"
+                    transparent
+                  />
+                  <Image
+                    position-x={0.2 + 0.02}
+                    position-y={-0.02}
+                    position-z={-0.01}
+                    scale={0.3}
+                    url="images/edit.png"
+                    transparent
+                    color="black"
+                  />
+                </>
+              )}
+            </Billboard>
+
+          {/*Modelo del jugador con la base*/}
+          <Cat type={player.getState("cat")}/>
+          {player.id === me?.id && (<>
+                <pointLight
+                  position-x={1}
+                  position-y={2}
+                  intensity={2}
+                  distance={3}
+                />
+                <group rotation-x={degToRad(-90)} position-y={0.01}>
+                  <mesh receiveShadow>
+                    <circleGeometry args={[2.2, 64]} />
+                    <meshStandardMaterial
+                      color="pink"
+                      toneMapped={false}
+                      emissive={"pink"}
+                      emissiveIntensity={1.2}
+                    />
+                  </mesh>
+                </group>
+                <mesh position-y={0.1} receiveShadow>
+                  <cylinderGeometry args={[2, 2, 0.2, 64]} />
+                  <meshStandardMaterial color="#8572af" />
+                </mesh>
+              </>
+          )}
         </group>
       ))}
 
       {/* Loaded Scene */}
       <Lobby />
 
-      <Cube ref={cubeRef} />
-      <Sphere />
+
+{/* ACTIVAR PARA LOS CONTROLES DEL DEBUG */}
+      {/* <Cube ref={cubeRef} /> */}
+      {/* <Sphere /> */}
+
       {/* <Plane /> */}
     </>
   )
