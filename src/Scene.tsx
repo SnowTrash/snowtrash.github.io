@@ -1,9 +1,9 @@
-import { Billboard, CameraControls, OrbitControls, PerspectiveCamera , Text , Image} from '@react-three/drei'
+import { Billboard, CameraControls, OrbitControls, PerspectiveCamera , Text , Image } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useControls } from 'leva'
 import { Perf } from 'r3f-perf'
-import { LegacyRef, useEffect, useRef } from 'react'
-import { BoxGeometry, Mesh, MeshBasicMaterial , Vector3 } from 'three'
+import { LegacyRef, useEffect, useRef , useState } from 'react'
+import { BoxGeometry, Mesh, MeshBasicMaterial , Vector3 , MathUtils , Group } from 'three'
 
 import { PerspectiveCamera as ThreePerspectiveCamera } from 'three';
 
@@ -23,6 +23,8 @@ import { degToRad } from "three/src/math/MathUtils";
 import { atom , useAtom  } from "jotai";
 import { NameEditingAtom } from './components/UI';
 
+// Character selection Animation utils
+import { cat_scales } from './components/Cat'
 
 function Scene() {
   const { performance } = useControls('Monitoring', {
@@ -77,7 +79,6 @@ function Scene() {
     // <>
     // <primitive object={scene} scale={25} position={[2.5, 0, -1.2]}/>
     // </> Adaptar la posicion inicial del modelo para posicionarlo en 0.0
-
     const angle = (index / players.length) * Math.PI * 2; // Ángulo para cada jugador
     const radius = 7; // Radio del círculo
     const x = Math.cos(angle) * radius;
@@ -85,11 +86,73 @@ function Scene() {
     return new Vector3( x, -3, z); 
   }
 
-  const me = myPlayer();
-
-
+  const me = myPlayer();  
   
   const [_nameEditing, setNameEditing] = useAtom(NameEditingAtom);
+  const SWITCH_DURATION = 600;
+
+
+  const CatSwitcher = ({ player }) => {
+    
+    const changedCarAt = useRef(0);
+    const container = useRef<Group | null>(null);
+    const [carModel, setCurrentCarModel] = useState(player.getState("cat"));
+    const gatoScale = useRef(new Vector3(cat_scales[player.getState("cat")], cat_scales[player.getState("cat")], cat_scales[player.getState("cat")]));
+
+useFrame(() => {
+        const timeSinceChange = Date.now() - changedCarAt.current;
+        if (!container.current) return;
+        if (timeSinceChange < SWITCH_DURATION / 2) {
+          container.current.rotation.y +=
+          2 * (timeSinceChange / SWITCH_DURATION / 2);
+        container.current.scale.x =
+          container.current.scale.y =
+          container.current.scale.z =
+            1 - timeSinceChange / SWITCH_DURATION / 2;
+            
+            gatoScale.current.set( 1 - timeSinceChange / SWITCH_DURATION / 2, 1 - timeSinceChange / SWITCH_DURATION / 2, 1 - timeSinceChange / SWITCH_DURATION / 2)
+        } else if (timeSinceChange < SWITCH_DURATION) {
+          container.current.rotation.y +=
+          4 * (1 - timeSinceChange / SWITCH_DURATION);
+        container.current.scale.x =
+          container.current.scale.y =
+          container.current.scale.z =
+            timeSinceChange / SWITCH_DURATION;
+
+            gatoScale.current.set(timeSinceChange / SWITCH_DURATION,timeSinceChange / SWITCH_DURATION,timeSinceChange / SWITCH_DURATION);
+
+            if (container.current.rotation.y > Math.PI * 2) {
+              container.current.rotation.y -= Math.PI * 2;
+            }
+        }
+
+        if (timeSinceChange >= SWITCH_DURATION) {
+            container.current.rotation.y = MathUtils.lerp(
+                container.current.rotation.y,
+                Math.PI * 2,
+                0.1
+            );
+        }
+    },[player,gatoScale]);
+
+
+useEffect(() => {
+        const newCar = player.getState("cat");
+        if (newCar !== carModel) {
+            changedCarAt.current = Date.now();
+            // setTimeout(() => {
+                setCurrentCarModel(newCar);
+            // }, SWITCH_DURATION / 2);
+        }
+    }, [player, carModel]);
+
+    return (
+        <group ref={container}>
+            <Cat type={carModel} scale={gatoScale.current}/>
+        </group>
+    );
+};
+
 
   return (
     <>
@@ -111,13 +174,13 @@ function Scene() {
       {players.map((player,index) => (
         <group key={player.id} position={calculatePosition(index)}>
           {/* Texto con la opcion de editable  */}
-            <Billboard position-y={2.9} position-x={0.5}>
-              <Text fontSize={0.34} anchorX={"right"}>
+            <Billboard position-y={3.2} position-x={0.5}>
+              <Text fontSize={0.54} anchorX={"right"}>
                 {player.getState("name") || player.getState("profile").name}
                 <meshBasicMaterial color="white" />
               </Text>
               <Text
-                fontSize={0.34}
+                fontSize={0.44}
                 anchorX={"right"}
                 position-x={0.02}
                 position-y={-0.02}
@@ -131,16 +194,16 @@ function Scene() {
                 <>
                 <Image
                     onClick={() => setNameEditing(true)}
-                    position-x={0.2}
-                    scale={0.3}
+                    position-x={0.7}
+                    scale={0.8}
                     url="images/edit.png"
                     transparent
                   />
                   <Image
-                    position-x={0.2 + 0.02}
+                    position-x={0.7 + 0.02}
                     position-y={-0.02}
                     position-z={-0.01}
-                    scale={0.3}
+                    scale={1.4}
                     url="images/edit.png"
                     transparent
                     color="black"
@@ -150,7 +213,8 @@ function Scene() {
             </Billboard>
 
           {/*Modelo del jugador con la base*/}
-          <Cat type={player.getState("cat")}/>
+          {/* <Cat type={player.getState("cat")}/> */}
+          <CatSwitcher player={player} />
           {player.id === me?.id && (<>
                 <pointLight
                   position-x={1}
@@ -188,6 +252,7 @@ function Scene() {
 
       {/* <Plane /> */}
     </>
+    
   )
 }
 
