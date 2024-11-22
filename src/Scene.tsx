@@ -13,7 +13,7 @@ import { Sphere } from './components/Sphere'
 
 // Playrooom & 3D Lobby
 import { Lobby } from './components/Lobby'
-import { myPlayer, usePlayersList , useMultiplayerState } from 'playroomkit'
+import { myPlayer, usePlayersList , useMultiplayerState , PlayerState } from 'playroomkit'
 import { Cat } from './components/Cat'
 import { Game } from './components/Game'
 
@@ -93,12 +93,18 @@ function Scene() {
   const SWITCH_DURATION = 600;
 
 
-  const CatSwitcher = ({ player }) => {
+  interface PlayerType extends PlayerState {
+    id: string;
+    getState: (key: string) => any; // Ajusta `any` si conoces el tipo de estado que devuelve
+  }
+  
+
+  const CatSwitcher = ({ player }: { player: PlayerType }) => {
     
     const changedCarAt = useRef(0);
     const container = useRef<Group | null>(null);
     const [carModel, setCurrentCarModel] = useState(player.getState("cat"));
-    const gatoScale = useRef(new Vector3(cat_scales[player.getState("cat")], cat_scales[player.getState("cat")], cat_scales[player.getState("cat")]));
+    // const gatoScale = useRef(new Vector3(cat_scales[player.getState("cat")], cat_scales[player.getState("cat")], cat_scales[player.getState("cat")]));
 
     
 useFrame(() => {
@@ -112,7 +118,7 @@ useFrame(() => {
           container.current.scale.z =
             1 - timeSinceChange / SWITCH_DURATION / 2;
             
-            gatoScale.current.set( 1 - timeSinceChange / SWITCH_DURATION / 2, 1 - timeSinceChange / SWITCH_DURATION / 2, 1 - timeSinceChange / SWITCH_DURATION / 2)
+            // gatoScale.current.set( 1 - timeSinceChange / SWITCH_DURATION / 2, 1 - timeSinceChange / SWITCH_DURATION / 2, 1 - timeSinceChange / SWITCH_DURATION / 2)
         } else if (timeSinceChange < SWITCH_DURATION) {
           container.current.rotation.y +=
           4 * (1 - timeSinceChange / SWITCH_DURATION);
@@ -121,7 +127,7 @@ useFrame(() => {
           container.current.scale.z =
             timeSinceChange / SWITCH_DURATION;
 
-            gatoScale.current.set(timeSinceChange / SWITCH_DURATION,timeSinceChange / SWITCH_DURATION,timeSinceChange / SWITCH_DURATION);
+            // gatoScale.current.set(timeSinceChange / SWITCH_DURATION,timeSinceChange / SWITCH_DURATION,timeSinceChange / SWITCH_DURATION);
 
             if (container.current.rotation.y > Math.PI * 2) {
               container.current.rotation.y -= Math.PI * 2;
@@ -135,7 +141,9 @@ useFrame(() => {
                 0.1
             );
         }
-    },[player,gatoScale]);
+    });
+  // },[player,gatoScale]);
+
 
 
 useEffect(() => {
@@ -148,9 +156,11 @@ useEffect(() => {
         }
     }, [player, carModel]);
 
+    // No se ha podido modificar el tamanio
+    // scale={gatoScale.current}
     return (
         <group ref={container}>
-            <Cat type={carModel} scale={gatoScale.current}/>
+            <Cat type={carModel} />
         </group>
     );
 };
@@ -174,7 +184,7 @@ const [gameState, setGameState] = useMultiplayerState("gameState", "lobby");
       <ambientLight intensity={0.2}/>
 
       {/* LOAD PLAYERS */}
-      {players.map((player,index) => (
+      {players.map((player: PlayerType, index: number) => (
         <group key={player.id} position={calculatePosition(index)}>
           {/* Texto con la opcion de editable  */}
             <Billboard position-y={3.2} position-x={0.5}>
