@@ -45,6 +45,7 @@ function Main() {
         }}
         shadows
       >
+      <color attach="background" args={["#333"]} />
         <Scene />
 
         <EffectComposer>

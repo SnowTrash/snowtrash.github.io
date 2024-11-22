@@ -6,7 +6,6 @@ import { Mesh , Vector3 } from "three";
 import { myPlayer, usePlayersList } from "playroomkit";
 const me = myPlayer();
 
-me?.setState("cat","mage")
 export const CAT_MODELS =[
     "mage",
     "toon",
@@ -20,6 +19,14 @@ export const cat_scales = {
     "animated": 0.17,
     "normal": 0.08
 };
+
+
+export const phisycs_scales = {
+    "mage": 0.8,
+    "toon": 0.08,
+    "animated": 0.4,
+    "normal": 0.3
+}
 
 // El gato mago tiene un material en los ojos para aplicar un Post Processing   
 export const Cat = ({

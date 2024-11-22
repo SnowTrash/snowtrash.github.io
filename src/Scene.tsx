@@ -13,8 +13,9 @@ import { Sphere } from './components/Sphere'
 
 // Playrooom & 3D Lobby
 import { Lobby } from './components/Lobby'
-import { myPlayer, usePlayersList } from 'playroomkit'
+import { myPlayer, usePlayersList , useMultiplayerState } from 'playroomkit'
 import { Cat } from './components/Cat'
+import { Game } from './components/Game'
 
 // player highligt
 import { degToRad } from "three/src/math/MathUtils";
@@ -99,6 +100,7 @@ function Scene() {
     const [carModel, setCurrentCarModel] = useState(player.getState("cat"));
     const gatoScale = useRef(new Vector3(cat_scales[player.getState("cat")], cat_scales[player.getState("cat")], cat_scales[player.getState("cat")]));
 
+    
 useFrame(() => {
         const timeSinceChange = Date.now() - changedCarAt.current;
         if (!container.current) return;
@@ -153,10 +155,11 @@ useEffect(() => {
     );
 };
 
+const [gameState, setGameState] = useMultiplayerState("gameState", "lobby");
 
   return (
     <>
-      {performance && <Perf position='top-left' />}
+      {performance && <Perf position='bottom-left' />}
 
     <PerspectiveCamera ref={cameraReference} position={[-7.8, 3, 12.5]} fov={55} near={0.1} far={200} />
       <CameraControls ref={controls} />
@@ -243,7 +246,8 @@ useEffect(() => {
       ))}
 
       {/* Loaded Scene */}
-      <Lobby />
+      {gameState === "lobby" && <Lobby />}
+      {gameState === "game" && <Game />}
 
 
 {/* ACTIVAR PARA LOS CONTROLES DEL DEBUG */}
