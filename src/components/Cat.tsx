@@ -11,14 +11,14 @@ export const CAT_MODELS =[
     "toon",
     "animated",
     "normal"
-];
+]
 
 export const cat_scales = {
     "mage": 0.6,
     "toon": 0.007,
     "animated": 0.17,
     "normal": 0.08
-};
+}
 
 
 export const phisycs_scales = {
@@ -31,12 +31,14 @@ export const phisycs_scales = {
 // El gato mago tiene un material en los ojos para aplicar un Post Processing   
 export const Cat = ({
     type = CAT_MODELS[0] as keyof typeof cat_scales,
-    // scale = new Vector3(1,1,1),
+    scale = new Number,
     ...props
  
 }) =>{
     const { scene } = useGLTF(`/models/cats/${type}_cat.glb`)
     
+    let escala  = cat_scales[type]
+
     useEffect(() => {
         scene.traverse((child) =>{
                 // console.log(child.material);
@@ -52,7 +54,7 @@ export const Cat = ({
 
     return(
         <group {...props}  >
-            <Clone object={scene} rotation-y={degToRad(0)} />
+            <Clone object={scene} rotation-y={degToRad(0)} scale={escala} />
         </group>
     )
 }

@@ -17,9 +17,13 @@
 
 `npm run dev`
 
+`npx tailwindcss -i ./src/styles/main.css -o ./src/output.css --watch`
+
 `npm run build`
 
 `npm run preview`
+
+`npm run deploy`
 
 
 ## Videos 4 Building
